@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Jordan AI Blog Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jordan AI Blog Generator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Jordan AI</h1>
-    <form method="POST">
-        <input name="prompt" placeholder="Enter a blog topic..." required />
-        <select name="language">
-            <option value="English">English</option>
-            <option value="Swahili">Swahili</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="Portuguese">Portuguese</option>
-            <option value="German">German</option>
-            <option value="Chinese">Chinese</option>
-            <option value="Korean">Korean</option>
-        </select>
-        <button type="submit">Generate</button>
+  <div class="container">
+    <h1>Jordan AI Blog Generator</h1>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" id="chat-form">
+      <label for="prompt">Enter blog topic:</label>
+      <textarea id="prompt" name="prompt" rows="4" required>{{ prompt }}</textarea>
+
+      <label for="language">Select language:</label>
+      <select id="language" name="language">
+        {% for lang in languages %}
+          <option value="{{ lang }}" {% if lang == language %}selected{% endif %}>{{ lang }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit">Generate Blog</button>
     </form>
 
     {% if blog %}
-        <h2>Generated Blog ({{ language }})</h2>
-        <p>{{ blog }}</p>
+      <h2>Generated Blog:</h2>
+      <div class="blog-output">{{ blog }}</div>
     {% endif %}
+  </div>
 </body>
 </html>

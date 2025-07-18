@@ -1,33 +1,53 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, render_template
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
+# Load the .env file to get the API key
 load_dotenv()
 
 app = Flask(__name__)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Set up OpenRouter client
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url="https://openrouter.ai/api/v1"  # This is OpenRouter's base URL
+)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    prompt = ""
+    blog = ""
+    language = "English"
+    error = None
+    languages = ["English", "Swahili", "Spanish", "French", "Portuguese", "German", "Chinese", "Korean"]
+
     if request.method == "POST":
         prompt = request.form.get("prompt", "")
         language = request.form.get("language", "English")
 
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"Write a blog post in {language} about: {prompt}"
-                }
-            ]
-        )
+        if not prompt:
+            error = "Please enter a blog topic."
+        else:
+            try:
+                response = client.chat.completions.create(
+                    model="mistralai/mistral-7b-instruct",  # OpenRouter model
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": f"You are a blog writer creating content in {language}."
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ]
+                )
+                blog = response.choices[0].message.content.strip()
+            except Exception as e:
+                error = f"Error: {str(e)}"
 
-        blog = response.choices[0].message.content.strip()
-        return render_template("index.html", blog=blog, prompt=prompt, language=language)
-
-    return render_template("index.html")
+    return render_template("index.html", blog=blog, prompt=prompt, language=language, error=error, languages=languages)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True)
