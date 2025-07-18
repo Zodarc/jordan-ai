@@ -2,36 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jordan AI Blog Generator</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jordan AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="container">
-    <h1>Jordan AI Blog Generator</h1>
+<body class="bg-gray-50 text-gray-800">
 
-    {% if error %}
-      <div class="error">{{ error }}</div>
-    {% endif %}
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-white shadow">
+    <div class="text-2xl font-bold text-blue-600">Jordan AI</div>
+    <div class="space-x-6 text-sm font-medium">
+      <a href="#premium" class="hover:text-blue-600">Premium</a>
+      <a href="#about" class="hover:text-blue-600">About</a>
+      <a href="#contact" class="hover:text-blue-600">Contact</a>
+      <a href="#blog" class="hover:text-blue-600">Blog</a>
+      <a href="/signin" class="hover:text-blue-600">Sign In</a>
+      <a href="/signup" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Sign Up</a>
+    </div>
+  </nav>
 
-    <form method="POST" id="chat-form">
-      <label for="prompt">Enter blog topic:</label>
-      <textarea id="prompt" name="prompt" rows="4" required>{{ prompt }}</textarea>
+  <!-- Hero -->
+  <section class="text-center py-12 px-4">
+    <h1 class="text-4xl font-bold mb-4">AI Tools for Creators</h1>
+    <p class="text-lg text-gray-600 mb-6">Generate blogs, banners, hashtags, meta tags, and more with Jordan AI.</p>
+  </section>
 
-      <label for="language">Select language:</label>
-      <select id="language" name="language">
-        {% for lang in languages %}
-          <option value="{{ lang }}" {% if lang == language %}selected{% endif %}>{{ lang }}</option>
-        {% endfor %}
-      </select>
-
-      <button type="submit">Generate Blog</button>
+  <!-- Blog Generator -->
+  <section class="max-w-3xl mx-auto px-4 py-10 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Blog Generator</h2>
+    <form method="POST" action="/" class="space-y-4">
+      <div>
+        <label for="prompt" class="block font-medium mb-1">Blog Topic</label>
+        <textarea id="prompt" name="prompt" rows="4" class="w-full p-3 border border-gray-300 rounded" required>{{ prompt }}</textarea>
+      </div>
+      <div>
+        <label for="language" class="block font-medium mb-1">Select Language</label>
+        <select id="language" name="language" class="w-full p-3 border border-gray-300 rounded">
+          {% for lang in languages %}
+            <option value="{{ lang }}" {% if lang == language %}selected{% endif %}>{{ lang }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 font-bold">Generate Blog</button>
     </form>
-
     {% if blog %}
-      <h2>Generated Blog:</h2>
-      <div class="blog-output">{{ blog }}</div>
+    <div class="mt-8">
+      <h3 class="text-xl font-bold mb-2">Generated Blog:</h3>
+      <div class="whitespace-pre-wrap p-4 bg-gray-100 rounded border border-gray-300">{{ blog }}</div>
+    </div>
     {% endif %}
-  </div>
+    {% if error %}
+      <div class="mt-4 text-red-600 font-bold">{{ error }}</div>
+    {% endif %}
+  </section>
+
+  <!-- Other Tools -->
+  <section class="max-w-6xl mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold mb-6 text-center">More AI Tools</h2>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Hashtag Generator -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-bold mb-2 text-blue-600">Hashtag Generator</h3>
+        <p class="mb-3 text-sm text-gray-600">Generate relevant hashtags for your content.</p>
+        <textarea class="w-full p-2 border border-gray-300 rounded mb-2" placeholder="Enter keywords..."></textarea>
+        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-bold">Generate Hashtags</button>
+      </div>
+
+      <!-- Meta Tags Generator -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-bold mb-2 text-blue-600">Meta Tags Generator</h3>
+        <p class="mb-3 text-sm text-gray-600">Generate SEO-friendly meta titles and descriptions.</p>
+        <textarea class="w-full p-2 border border-gray-300 rounded mb-2" placeholder="Enter page info..."></textarea>
+        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-bold">Generate Meta</button>
+      </div>
+
+      <!-- Banner Generator -->
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-bold mb-2 text-blue-600">Banner Generator</h3>
+        <p class="mb-3 text-sm text-gray-600">Create social media banners using AI.</p>
+        <textarea class="w-full p-2 border border-gray-300 rounded mb-2" placeholder="Enter banner theme..."></textarea>
+        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 font-bold">Generate Banner</button>
+      </div>
+    </div>
+
+    <!-- Quick Topic Templates -->
+    <div class="mt-12">
+      <h3 class="text-xl font-bold mb-4 text-center">Quick Topics</h3>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="px-4 py-2 bg-gray-200 rounded hover:bg-blue-100">Tech</button>
+        <button class="px-4 py-2 bg-gray-200 rounded hover:bg-blue-100">Food</button>
+        <button class="px-4 py-2 bg-gray-200 rounded hover:bg-blue-100">Health</button>
+        <button class="px-4 py-2 bg-gray-200 rounded hover:bg-blue-100">Fashion</button>
+        <button class="px-4 py-2 bg-gray-200 rounded hover:bg-blue-100">Lifestyle</button>
+      </div>
+    </div>
+
+    <!-- Blog Download Section -->
+    <div class="mt-12 bg-white p-6 rounded shadow text-center">
+      <h3 class="text-xl font-bold mb-3 text-blue-600">Download Your Blog</h3>
+      <p class="text-sm text-gray-600 mb-4">Save your generated content as a .txt or .md file.</p>
+      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Download</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center text-sm text-gray-500 py-6 mt-12">
+    &copy; 2025 Jordan AI. All rights reserved.
+  </footer>
+
 </body>
 </html>
